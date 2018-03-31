@@ -13,7 +13,6 @@ electron main.js
 
 ## To Do:
 
-- Add keyboard controls
 - Add alert sound
 - Structure & refactor: See [here](https://becoming-functional.com/nine-guidelines-for-modular-elm-development-fe18d2f7885e) and [here](http://blog.jenkster.com/2016/04/how-i-structure-elm-apps.html)
 - Make Electron bundle nicer

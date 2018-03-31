@@ -10,6 +10,8 @@ import Bootstrap.Grid.Row as Row
 import Bootstrap.Grid.Col as Col
 import Task exposing (Task, perform, attempt)
 import Notification exposing (Error, Notification, Permission, create, defaultOptions, requestPermission)
+import Keyboard exposing (KeyCode, presses)
+
 
 main : Program Never Model Msg
 main = Html.program
@@ -52,6 +54,7 @@ type Msg
     | SetSeconds String
     | RequestPermissionResult Permission
     | NotificationResult (Result Error ())
+    | KeyMsg KeyCode
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -77,6 +80,8 @@ update msg model =
                     time = timeFromSetting (h, m, s), 
                     timerState = Editing }, Cmd.none)
 
+    KeyMsg code -> processKeyCode model code
+
     _ -> 
       case model.timerState of
         Ticking -> 
@@ -92,7 +97,9 @@ update msg model =
 
         Paused -> 
           (case msg of  
-            Start -> { model | time = timeFromSetting model.timeSetting, timerState = Ticking }
+            Start -> 
+              let t = if model.time > 1 then model.time else timeFromSetting model.timeSetting
+              in { model | time = t, timerState = Ticking }
             Reset -> { model | timerState = Editing }
             _ -> model, Cmd.none)
 
@@ -106,14 +113,37 @@ notificationCmd = Notification "🛎" { defaultOptions | body = Just ("Timer is 
   |> create
   |> attempt NotificationResult
 
+processKeyCode : Model -> KeyCode -> (Model, Cmd Msg)
+processKeyCode model code = 
+  ((case code of
+    114 -> -- "r"
+      { model | timerState = Editing } 
+    
+    115 -> -- "s"
+      case model.timerState of 
+        Ticking -> { model | timerState = Paused }
+        Paused ->               
+          let t = if model.time > 1 then model.time else timeFromSetting model.timeSetting
+          in { model | time = t, timerState = Ticking }
+        Editing -> { model | time = timeFromSetting model.timeSetting, timerState = Ticking }
+
+    _ -> model
+  ), Cmd.none)
+
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
+    Sub.batch 
+    [ timeSub model
+    , presses KeyMsg
+    ]
+
+timeSub : Model -> Sub Msg
+timeSub model =
     case model.timerState of
         Ticking -> Time.every second Tick
         _ -> Sub.none
-
 
 -- VIEW
 
