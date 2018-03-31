@@ -51,21 +51,21 @@ update msg model =
   case msg of 
     SetHours str -> 
       let (_, m, s) = model.timeSetting 
-      in let h = Result.withDefault 0 (String.toInt str)
+      in let h = (Result.withDefault 0 (String.toInt str)) % 24
       in ({ model | timeSetting = (h, m, s), 
                     time = timeFromSetting (h, m, s), 
                     timerState = Editing True }, Cmd.none)
 
     SetMinutes str -> 
       let (h, _, s) = model.timeSetting 
-      in let m = Result.withDefault 0 (String.toInt str)
+      in let m = (Result.withDefault 0 (String.toInt str) % 60)
       in ({ model | timeSetting = (h, m, s), 
                     time = timeFromSetting (h, m, s), 
                     timerState = Editing True }, Cmd.none)
 
     SetSeconds str -> 
       let (h, m, _) = model.timeSetting 
-      in let s = Result.withDefault 0 (String.toInt str)
+      in let s = (Result.withDefault 0 (String.toInt str) % 60)
       in ({ model | timeSetting = (h, m, s),
                     time = timeFromSetting (h, m, s), 
                     timerState = Editing True }, Cmd.none)
@@ -131,11 +131,11 @@ timeView model =
   case model.timerState of 
     Editing valid -> 
       let (h, m, s) = model.timeSetting in div []
-        [ input [ type_ "number", placeholder "00", value (toString h), onInput SetHours ] []
+        [ input [ type_ "text", placeholder "00", value (twoDigitString h), onInput SetHours ] []
         , text ":"
-        , input [ type_ "number", placeholder "00", value (toString m), onInput SetMinutes ] []
+        , input [ type_ "text", placeholder "00", value (twoDigitString m), onInput SetMinutes ] []
         , text ":"      
-        , input [ type_ "number", placeholder "00", value (toString s), onInput SetSeconds ] []
+        , input [ type_ "text", placeholder "00", value (twoDigitString s), onInput SetSeconds ] []
         ]
     _ -> 
       let s = model.time in div []
@@ -159,6 +159,8 @@ hoursMinutesSeconds s =
 
 hoursMinutesSecondsString : (Int, Int, Int) -> String
 hoursMinutesSecondsString (h, m, s) = 
-  let twoDigit x = padLeft 2 '0' (toString x) 
-  in let hourString = if h > 0 then (twoDigit h) ++ ":" else ""
-  in hourString ++ (twoDigit m) ++ ":" ++ (twoDigit s)
+  let hourString = if h > 0 then (twoDigitString h) ++ ":" else ""
+  in hourString ++ (twoDigitString m) ++ ":" ++ (twoDigitString s)
+
+twoDigitString : Int -> String
+twoDigitString d = padLeft 2 '0' (toString d)

@@ -5,7 +5,6 @@ Bundled as an Electron app using [this guide](https://medium.com/@ezekeal/buildi
 
 ## To Do:
 
-- Use frameless window (https://electronjs.org/docs/api/frameless-window)
-- Add validation or just use modulo when entering numbers
 - HTML5 notifications
-- Add Keyboard controls
+- Keyboard controls
+- Use [frameless window](https://electronjs.org/docs/api/frameless-window), disallow resize
