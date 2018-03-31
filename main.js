@@ -12,8 +12,9 @@ app.on('ready', createWindow) // called when electron has initialized
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 420,
-        height: 200,
+        height: 190,
         resizable: false,
+        titleBarStyle: 'hidden',
         webPreferences: {
             devTools: false
         }

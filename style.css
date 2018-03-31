@@ -1,6 +1,7 @@
 body {
     font-family: system-ui, "SanFranciscoDisplay-Regular";
     user-select: none;
+    -webkit-app-region: drag;
 }
 
 .timer-container {
@@ -18,20 +19,13 @@ body {
     border-radius: 4px;
 }
 
-.timer-container input:focus {
-    /*border-bottom: 5px solid #428bca;*/
-    /* outline: none; */
-}
-
-/* .colon {
-    margin: 0 -12px;
-} */
-
 .timer-container .time-view {
     font-size: 5rem;
+    padding-top: 12px;
 }
 
 .timer-container .controls button {
     width: 100%;
     font-size: 1.3rem;
+    -webkit-app-region: no-drag;
 }
