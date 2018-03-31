@@ -1,6 +1,6 @@
 # Togepi Timer
 
-A timer in Elm that emulates the functionality of the iOS timer app. 
+An egg timer written in Elm that emulates the stock iOS timer functionality.
 
 ## To Do:
 
