@@ -5,6 +5,10 @@ Bundled as an Electron app using [this guide](https://medium.com/@ezekeal/buildi
 
 ## To Do:
 
-- HTML5 notifications
 - Keyboard controls
-- Use [frameless window](https://electronjs.org/docs/api/frameless-window), disallow resize
+- Sound
+- Make Electron bundle nicer
+    - Use [frameless window](https://electronjs.org/docs/api/frameless-window)
+    - Disallow resize
+    - Include font
+    - Add logo

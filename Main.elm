@@ -8,7 +8,10 @@ import String exposing (padLeft)
 import Bootstrap.Grid as Grid
 import Bootstrap.Grid.Row as Row
 import Bootstrap.Grid.Col as Col
+import Task exposing (Task, perform, attempt)
+import Notification exposing (Error, Notification, Permission, create, defaultOptions, requestPermission)
 
+main : Program Never Model Msg
 main = Html.program
     { init = init
     , view = view
@@ -19,7 +22,7 @@ main = Html.program
 
 -- MODEL
 
-type TimerState = Paused | Ticking | Editing Bool
+type TimerState = Paused | Ticking | Editing
 
 type alias Model = { 
   timeSetting: (Int, Int, Int),
@@ -29,7 +32,10 @@ type alias Model = {
 
 init : (Model, Cmd Msg)
 init = let setting = (0, 25, 0) in let t = timeFromSetting setting in 
-  ({timeSetting = setting, time = t, timerState = Paused }, Cmd.none)
+  (
+    {timeSetting = setting, time = t, timerState = Paused }
+  , perform RequestPermissionResult requestPermission 
+  )
 
 timeFromSetting : (Int, Int, Int) -> Int
 timeFromSetting (h, m, s) = h * 3600 + m * 60 + s
@@ -44,7 +50,8 @@ type Msg
     | SetHours String
     | SetMinutes String
     | SetSeconds String
-    | ValidationError
+    | RequestPermissionResult Permission
+    | NotificationResult (Result Error ())
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -54,45 +61,50 @@ update msg model =
       in let h = (Result.withDefault 0 (String.toInt str)) % 24
       in ({ model | timeSetting = (h, m, s), 
                     time = timeFromSetting (h, m, s), 
-                    timerState = Editing True }, Cmd.none)
+                    timerState = Editing }, Cmd.none)
 
     SetMinutes str -> 
       let (h, _, s) = model.timeSetting 
       in let m = (Result.withDefault 0 (String.toInt str) % 60)
       in ({ model | timeSetting = (h, m, s), 
                     time = timeFromSetting (h, m, s), 
-                    timerState = Editing True }, Cmd.none)
+                    timerState = Editing }, Cmd.none)
 
     SetSeconds str -> 
       let (h, m, _) = model.timeSetting 
       in let s = (Result.withDefault 0 (String.toInt str) % 60)
       in ({ model | timeSetting = (h, m, s),
                     time = timeFromSetting (h, m, s), 
-                    timerState = Editing True }, Cmd.none)
+                    timerState = Editing }, Cmd.none)
 
     _ -> 
-      ((case model.timerState of
+      case model.timerState of
         Ticking -> 
-          (case msg of 
-            Tick _ -> let s = model.time in let newState = if s > 1 then Ticking else Paused
-                in { model | timerState = newState, time = s - 1 }
-            Pause -> { model | timerState = Paused }
-            Reset -> { model | timerState = Editing True }
-            _ -> model)
+          case msg of 
+            Tick _ -> 
+              let s = model.time 
+              in let newState = if s > 1 then Ticking else Paused
+              in let cmd = if newState == Paused then notificationCmd else Cmd.none
+              in ({ model | timerState = newState, time = s - 1 }, cmd)
+            Pause -> ({ model | timerState = Paused }, Cmd.none)
+            Reset -> ({ model | timerState = Editing }, Cmd.none)
+            _ -> (model, Cmd.none)
 
         Paused -> 
           (case msg of  
-            Start -> { model | timerState = Ticking }
-            Reset -> { model | timerState = Editing True }
-            _ -> model)
+            Start -> { model | time = timeFromSetting model.timeSetting, timerState = Ticking }
+            Reset -> { model | timerState = Editing }
+            _ -> model, Cmd.none)
 
-        Editing valid -> 
+        Editing -> 
           (case msg of
-            Start -> { model | timerState = Ticking }
-            ValidationError -> { model | timerState = Editing False }
-            _ -> model))
-        , Cmd.none)
+            Start -> { model | time = timeFromSetting model.timeSetting, timerState = Ticking }
+            _ -> model, Cmd.none)
 
+notificationCmd : Cmd Msg
+notificationCmd = Notification "🛎" { defaultOptions | body = Just ("Timer is done!") }
+  |> create
+  |> attempt NotificationResult
 
 -- SUBSCRIPTIONS
 
@@ -129,7 +141,7 @@ view model =
 timeView : Model -> Html Msg
 timeView model = 
   case model.timerState of 
-    Editing valid -> 
+    Editing -> 
       let (h, m, s) = model.timeSetting in div []
         [ input [ type_ "text", placeholder "00", value (twoDigitString h), onInput SetHours ] []
         , text ":"
