@@ -1,0 +1,11 @@
+{
+  "name": "togepi",
+  "version": "1.0.0",
+  "description": "An egg timer that emulates the stock iOS timer functionality.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zeno Koller",
+  "license": "ISC"
+}
