@@ -9,31 +9,34 @@ let mainWindow // saves a global reference to mainWindow so it doesn't get garba
 app.on('ready', createWindow) // called when electron has initialized
 
 // This will create our app window, no surprise there
-function createWindow () {
-  mainWindow = new BrowserWindow({
-    width: 420, 
-    height: 170
-  })
+function createWindow() {
+    mainWindow = new BrowserWindow({
+        width: 420,
+        height: 200,
+        webPreferences: {
+            devTools: false
+        }
+    })
 
-  // display the index.html file
-  mainWindow.loadURL(`file://${ __dirname }/index.html`)
-  
-  // open dev tools by default so we can see any console errors
-  mainWindow.webContents.openDevTools()
+    // display the index.html file
+    mainWindow.loadURL(`file://${__dirname}/index.html`)
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+    // open dev tools by default so we can see any console errors
+    mainWindow.webContents.openDevTools()
+
+    mainWindow.on('closed', function () {
+        mainWindow = null
+    })
 }
 
 /* Mac Specific things */
 
 // when you close all the windows on a non-mac OS it quits the app
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') { app.quit() }
+    if (process.platform !== 'darwin') { app.quit() }
 })
 
 // if there is no mainWindow it creates one (like when you click the dock icon)
 app.on('activate', () => {
-  if (mainWindow === null) { createWindow() }
+    if (mainWindow === null) { createWindow() }
 })
