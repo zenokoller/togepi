@@ -1,8 +1,13 @@
+module Main exposing (main)
+
 import Html exposing (Html, button, div, input, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Time exposing (Time, second)
 import String exposing (padLeft)
+import Bootstrap.CDN as CDN
+import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Col as Col
 
 
 main = Html.program
@@ -103,11 +108,23 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ timeView model
-    , button [ onClick Reset ] [ text "Reset" ]
-    , startButton model
+  Grid.containerFluid []
+  [ CDN.stylesheet
+  , Grid.row [] 
+    [ Grid.col [] 
+      [ timeView model ] 
     ]
+  , Grid.row [] 
+    [ Grid.col [ Col.xs6 ]
+      [
+        button [ onClick Reset ] [ text "Reset" ] 
+      ]
+    , Grid.col [ Col.xs6 ] 
+      [
+        startButton model
+      ]
+    ]
+  ]
 
 timeView : Model -> Html Msg
 timeView model = 
