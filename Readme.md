@@ -7,13 +7,13 @@ Bundled as an Electron app using [this guide](https://medium.com/@ezekeal/buildi
 
 ```
 elm-install
-elm make Main.elm --output elm.js
-electron main.js
+elm make src/elm/Main.elm --output dist/elm.js
+electron src/electron/main.js
 ```
 
 ## To Do:
 
-- Structure & refactor: See [here](https://becoming-functional.com/nine-guidelines-for-modular-elm-development-fe18d2f7885e) and [here](http://blog.jenkster.com/2016/04/how-i-structure-elm-apps.html)
+- Refactor update into separate functions
 - Add alert sound
 - Use space instead of "s" (need to disable button focus)
 - [Add app icon](https://www.christianengvall.se/electron-app-icons/)
