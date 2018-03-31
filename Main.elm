@@ -1,14 +1,13 @@
 module Main exposing (main)
 
-import Html exposing (Html, button, div, input, text)
+import Html exposing (Html, button, div, input, text, node, span)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Time exposing (Time, second)
 import String exposing (padLeft)
-import Bootstrap.CDN as CDN
 import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Row as Row
 import Bootstrap.Grid.Col as Col
-
 
 main = Html.program
     { init = init
@@ -108,16 +107,17 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  Grid.containerFluid []
-  [ CDN.stylesheet
+  Grid.containerFluid [ class "timer-container" ]
+  [ node "link" [ rel "stylesheet", href "bootstrap.min.css" ] []
+  , node "link" [ rel "stylesheet", href "style.css" ] []
   , Grid.row [] 
-    [ Grid.col [] 
+    [ Grid.col [ Col.attrs [ class "time-view" ]] 
       [ timeView model ] 
     ]
-  , Grid.row [] 
+  , Grid.row [ Row.attrs [ class "controls" ]] 
     [ Grid.col [ Col.xs6 ]
       [
-        button [ onClick Reset ] [ text "Reset" ] 
+        button [ class "btn btn-secondary", onClick Reset ] [ text "Reset" ] 
       ]
     , Grid.col [ Col.xs6 ] 
       [
@@ -140,13 +140,13 @@ timeView model =
     _ -> 
       let s = model.time in div []
         [
-          text (secondsToString s)
+          span [] [ text (secondsToString s)]
         ] 
 
 startButton : Model -> Html Msg
 startButton model = case model.timerState of 
-  Ticking -> button [ onClick Pause ] [ text "Pause"]
-  _ -> button [ onClick Start ] [ text "Start"]
+  Ticking -> button [ class "btn btn-primary", onClick Pause ] [ text "Pause"]
+  _ -> button [ class "btn btn-primary", onClick Start ] [ text "Start"]
 
 secondsToString : Int -> String
 secondsToString = hoursMinutesSeconds >> hoursMinutesSecondsString

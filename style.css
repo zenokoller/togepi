@@ -1,0 +1,36 @@
+body {
+    font-family: system-ui;
+}
+
+.timer-container {
+    max-width: 420px;
+    text-align: center;
+}
+
+.timer-container input {
+    width: 116px;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.timer-container input:focus {
+    /*border-bottom: 5px solid #428bca;*/
+    /* outline: none; */
+}
+
+/* .colon {
+    margin: 0 -12px;
+} */
+
+.timer-container .time-view {
+    font-size: 5rem;
+}
+
+.timer-container .controls button {
+    width: 100%;
+    font-size: 1.3rem;
+}
