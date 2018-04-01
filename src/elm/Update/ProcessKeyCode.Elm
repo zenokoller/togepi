@@ -1,15 +1,8 @@
-module Update.Utils exposing (notificationCmd, processKeyCode)
+module Update.ProcessKeyCode exposing (processKeyCode)
 
 import Model exposing (..)
-import Task exposing (attempt)
-import Notification exposing (Notification, create, defaultOptions)
 import Keyboard exposing (KeyCode)
 import View.Utils exposing (timeFromSetting)
-
-notificationCmd : Cmd Msg
-notificationCmd = Notification "🛎" { defaultOptions | body = Just ("Timer is done!") }
-  |> create
-  |> attempt NotificationResult
 
 processKeyCode : Model -> KeyCode -> (Model, Cmd Msg)
 processKeyCode model code = 
@@ -27,3 +20,4 @@ processKeyCode model code =
 
     _ -> model
   ), Cmd.none)
+  

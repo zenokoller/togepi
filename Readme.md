@@ -13,8 +13,9 @@ electron src/electron/main.js
 
 ## To Do:
 
-- Refactor update into separate functions
 - Add alert sound
 - Use space instead of "s" (need to disable button focus)
-- [Add app icon](https://www.christianengvall.se/electron-app-icons/)
-- Use [electron-builder](https://github.com/electron-userland/electron-builder)
+- Electron
+    - [Add app icon](https://www.christianengvall.se/electron-app-icons/)
+    - Use [electron-builder](https://github.com/electron-userland/electron-builder)
+    - How to hide?
