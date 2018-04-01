@@ -1,11 +1,17 @@
 {
   "name": "togepi",
+  "productName": "Togepi",
   "version": "1.0.0",
   "description": "An egg timer that emulates the stock iOS timer functionality.",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "src/electron/main.js",
   "author": "Zeno Koller",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.4.13",
+    "electron-packager": "^11.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=dist/builds"
+  }
 }

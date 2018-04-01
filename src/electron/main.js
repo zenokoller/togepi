@@ -1,5 +1,6 @@
 'use strict'
 const electron = require('electron')
+const path = require('path')
 
 const app = electron.app // this is our app
 const BrowserWindow = electron.BrowserWindow // This is a Module that creates windows  
@@ -15,6 +16,7 @@ function createWindow() {
         height: 190,
         resizable: false,
         titleBarStyle: 'hidden',
+        icon: path.join(__dirname, 'assets/icons/64x64.png'),
         webPreferences: {
             devTools: false
         }

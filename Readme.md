@@ -3,11 +3,28 @@
 An egg timer written in Elm that emulates the stock iOS timer functionality.
 Bundled as an Electron app using [this guide](https://medium.com/@ezekeal/building-an-electron-app-with-elm-part-1-boilerplate-3416a730731f).
 
-## Install
+## Running & Building 
+
+### Elm Version in Browser
 
 ```
 elm-install
-elm make src/elm/Main.elm --output dist/elm.js
+elm-reactor
+```
+
+### Electron Version with Debugging
+
+```
+elm-install
+elm make src/elm/Main.elm --output dist/elm/elm.js
+electron src/electron/main.js
+```
+
+### Packaged Electron Version
+
+```
+elm-install
+elm make src/elm/Main.elm --output dist/elm/elm.js
 electron src/electron/main.js
 ```
 
@@ -15,7 +32,4 @@ electron src/electron/main.js
 
 - Add alert sound
 - Use space instead of "s" (need to disable button focus)
-- Electron
-    - [Add app icon](https://www.christianengvall.se/electron-app-icons/)
-    - Use [electron-builder](https://github.com/electron-userland/electron-builder)
-    - How to hide?
+- [Add menu and ⌘ + H](https://www.christianengvall.se/electron-menu/)

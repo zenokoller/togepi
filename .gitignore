@@ -1,4 +1,6 @@
 elm.js
+dist
+node_modules
 
 # Created by https://www.gitignore.io/api/elm,macos
 
